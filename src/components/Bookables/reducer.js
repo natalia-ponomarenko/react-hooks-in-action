@@ -1,4 +1,5 @@
 export default function reducer(state, action) {
+  let count;
   switch (action.type) {
     case 'SET_GROUP':
       return {
@@ -17,7 +18,7 @@ export default function reducer(state, action) {
         hasDetails: !state.hasDetails,
       };
     case 'NEXT_BOOKABLE':
-      const count = state.bookables.filter(
+      count = state.bookables.filter(
         (bookable) => bookable.group === state.group
       ).length;
       return {
