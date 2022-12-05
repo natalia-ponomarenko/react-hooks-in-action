@@ -1,14 +1,24 @@
-import React, { useState } from 'react'
-import data from '../../static.json'
+import React, { useState, useEffect } from 'react';
+import Spinner from '../../UI/Spinner';
 
 export default function UsersList() {
-  const [selectedUserIndex, setSelectedUserIndex] = useState(0)
-  const { users } = data
-  const user = users[selectedUserIndex]
+  const [selectedUserIndex, setSelectedUserIndex] = useState(0);
+  const [users, setUsers] = useState(null);
+  const user = users?.[selectedUserIndex];
+
+  useEffect(() => {
+    fetch('http://localhost:3001/users')
+      .then((resp) => resp.json())
+      .then((data) => setUsers(data));
+  }, []);
+  if (users === null) {
+    return <Spinner />;
+  }
 
   const handleButtonClick = (selectedId) => {
-    setSelectedUserIndex(selectedId)
-  }
+    setSelectedUserIndex(selectedId);
+  };
+
   return (
     <>
       <ul className="users items-list-nav">
@@ -39,5 +49,5 @@ export default function UsersList() {
         </div>
       )}
     </>
-  )
+  );
 }
