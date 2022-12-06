@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, useRef } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { sessions, days } from '../../static.json';
 // import data from '../../static.json';
@@ -26,6 +26,8 @@ export default function BookablesList() {
   const groups = [
     ...new Set(bookables.map((bookableItem) => bookableItem.group)),
   ];
+  const timerRef = useRef(null);
+  const nextButtonRef = useRef();
 
   useEffect(() => {
     dispatch({ type: 'FETCH_BOOKABLES_REQUEST' });
@@ -42,6 +44,17 @@ export default function BookablesList() {
           payload: errorMessage,
         })
       );
+  }, []);
+
+  function stopPresentation() {
+    clearInterval(timerRef.current);
+  }
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      dispatch({ type: 'NEXT_BOOKABLE' });
+    }, 3000);
+    return stopPresentation;
   }, []);
 
   function changeGroup(e) {
@@ -62,6 +75,7 @@ export default function BookablesList() {
       type: 'SET_BOOKABLE',
       payload: selectedIndex,
     });
+    nextButtonRef.current.focus();
   }
 
   function toggleDetails() {
@@ -106,7 +120,13 @@ export default function BookablesList() {
           ))}
         </ul>
         <p>
-          <button className="btn" type="button" onClick={nextBookable}>
+          <button
+            className="btn focuse-mode"
+            type="button"
+            onClick={nextBookable}
+            ref={nextButtonRef}
+            autoFocus
+          >
             <FaArrowRight />
             <span>Next</span>
           </button>
@@ -127,6 +147,13 @@ export default function BookablesList() {
                   />
                   Show Details
                 </label>
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={stopPresentation}
+                >
+                  Stop
+                </button>
               </span>
             </div>
             <p>{bookable.notes}</p>
