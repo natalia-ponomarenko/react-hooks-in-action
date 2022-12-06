@@ -1,29 +1,48 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
-import data from '../../static.json';
+import { sessions, days } from '../../static.json';
+// import data from '../../static.json';
+// get data.sessions and data.days
 import reducer from './reducer';
+import Spinner from '../../UI/Spinner';
+import getData from '../../utils/api';
 
 const initialState = {
   group: 'Rooms',
   bookableIndex: 0,
   hasDetails: true,
-  bookables: data.bookables,
+  bookables: [],
+  isLoading: true,
+  error: false,
 };
 
 export default function BookablesList() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { group, bookableIndex, bookables, hasDetails } = state;
+  const { group, bookableIndex, bookables, hasDetails, isLoading, error } =
+    state;
 
   const bookablesInGroup = bookables.filter((b) => b.group === group);
   const bookable = bookablesInGroup[bookableIndex];
+  const groups = [
+    ...new Set(bookables.map((bookableItem) => bookableItem.group)),
+  ];
 
-  function getUniqueValues(array, property) {
-    const propValues = array.map((element) => element[property]);
-    const uniqueValues = new Set(propValues);
-    const uniqueValuesArray = [...uniqueValues];
-    return uniqueValuesArray;
-  }
-  const groups = getUniqueValues(bookables, 'group');
+  useEffect(() => {
+    dispatch({ type: 'FETCH_BOOKABLES_REQUEST' });
+    getData('http://localhost:3001/bookables')
+      .then((listOfBookables) =>
+        dispatch({
+          type: 'FETCH_BOOKABLES_SUCCESS',
+          payload: listOfBookables,
+        })
+      )
+      .catch((errorMessage) =>
+        dispatch({
+          type: 'FETCH_BOOKABLES_ERROR',
+          payload: errorMessage,
+        })
+      );
+  }, []);
 
   function changeGroup(e) {
     dispatch({
@@ -47,6 +66,17 @@ export default function BookablesList() {
 
   function toggleDetails() {
     dispatch({ type: 'TOGGLE_HAS_DETAILS' });
+  }
+
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+  if (isLoading) {
+    return (
+      <p>
+        <Spinner /> Loading bookables...
+      </p>
+    );
   }
 
   return (
