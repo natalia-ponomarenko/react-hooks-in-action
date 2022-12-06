@@ -1,18 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import Spinner from '../../UI/Spinner';
+import getData from '../../utils/api';
 
 export default function UsersList() {
   const [selectedUserIndex, setSelectedUserIndex] = useState(0);
   const [users, setUsers] = useState(null);
   const user = users?.[selectedUserIndex];
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3001/users')
-      .then((resp) => resp.json())
-      .then((data) => setUsers(data));
+    getData("http://localhost:3001/users")
+      .then((usersList) => {
+        setUsers(usersList);
+        setLoading(false);
+      })
+      .catch((unexpectedError) => {
+        setError(unexpectedError);
+        setLoading(false)
+      });
   }, []);
-  if (users === null) {
-    return <Spinner />;
+
+  if (error) {
+    return <p>{error.message}</p>
+  }
+
+  if (loading) {
+    return <p><Spinner/> Loading users...</p>
   }
 
   const handleButtonClick = (selectedId) => {
@@ -21,6 +35,7 @@ export default function UsersList() {
 
   return (
     <>
+    {loading && <p><Spinner/> Loading users...</p>}
       <ul className="users items-list-nav">
         {users.map((person, i) => (
           <li

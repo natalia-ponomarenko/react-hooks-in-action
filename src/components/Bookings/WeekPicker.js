@@ -1,11 +1,30 @@
-import React, { useReducer } from 'react';
-import { FaChevronLeft, FaCalendarDay, FaChevronRight } from 'react-icons/fa';
+import React, { useReducer, useState } from 'react';
+import {
+  FaChevronLeft,
+  FaCalendarDay,
+  FaChevronRight,
+  FaCalendarCheck,
+} from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import reducer from './weekReducer';
 import { getWeek } from '../../utils/date-wrangler';
 
 export default function WeekPicker({ date }) {
   const [week, dispatch] = useReducer(reducer, date, getWeek);
+  const [dateText, setDateText] = useState("2022-01-01");
+
+  
+  function handleInput(e) {
+    setDateText(e.target.value);
+  }
+
+  function goToDate() {
+    dispatch({
+      type: 'SET_DATE',
+      payload: dateText,
+    });
+  }
+
   return (
     <div>
       <p className="date-picker">
@@ -25,6 +44,18 @@ export default function WeekPicker({ date }) {
           <FaCalendarDay />
           <span>Today</span>
         </button>
+        <span>
+          <input
+            type="text"
+            placeholder="e.g. 2023-05-12"
+            value={dateText}
+            onChange={handleInput}
+          />
+          <button type="button" className="go btn" onClick={goToDate}>
+            <FaCalendarCheck />
+            <span>Go</span>
+          </button>
+        </span>
         <button
           type="button"
           className="btn"
