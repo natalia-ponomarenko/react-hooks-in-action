@@ -6,23 +6,28 @@ export default function UsersList() {
   const [selectedUserIndex, setSelectedUserIndex] = useState(0);
   const [users, setUsers] = useState(null);
   const user = users?.[selectedUserIndex];
-  // const [error, setError] = useState('');
-  // const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getData('http://localhost:3001/userss')
-      .then((usersList) => setUsers(usersList))
-      .catch((unexpectedError) => console.log(unexpectedError.message));
+    getData("http://localhost:3001/users")
+      .then((usersList) => {
+        setUsers(usersList);
+        setLoading(false);
+      })
+      .catch((unexpectedError) => {
+        setError(unexpectedError);
+        setLoading(false)
+      });
   }, []);
 
-  if (users === null) {
-    // setLoading(true)
-    return <Spinner/>
+  if (error) {
+    return <p>{error.message}</p>
   }
 
-  // if (error) {
-  //   setLoading(false)
-  // }
+  if (loading) {
+    return <p><Spinner/> Loading users...</p>
+  }
 
   const handleButtonClick = (selectedId) => {
     setSelectedUserIndex(selectedId);
@@ -30,7 +35,7 @@ export default function UsersList() {
 
   return (
     <>
-    {/* {loading && <Spinner/>} */}
+    {loading && <p><Spinner/> Loading users...</p>}
       <ul className="users items-list-nav">
         {users.map((person, i) => (
           <li
