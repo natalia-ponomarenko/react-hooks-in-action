@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { days, sessions } from '../../static.json';
+import data from '../../static.json';
 
 export default function BookableDetails({ bookable }) {
   const [hasDetails, setHasDetails] = useState(true);
+  const {days, sessions} = data;
 
   function toggleDetails() {
     setHasDetails((has) => !has);
@@ -31,13 +32,13 @@ export default function BookableDetails({ bookable }) {
           <h3>Availability</h3>
           <div className="bookable-availability">
             <ul>
-              {bookable.days.sort().map((d) => (
-                <li key={d}>{days[d]}</li>
+              {bookable.days.sort().map((day) => (
+                <li key={day}>{days[day]}</li>
               ))}
             </ul>
             <ul>
-              {bookable.sessions.map((s) => (
-                <li key={s}>{sessions[s]}</li>
+              {bookable.sessions.map((session) => (
+                <li key={session}>{sessions[session]}</li>
               ))}
             </ul>
           </div>
@@ -47,8 +48,17 @@ export default function BookableDetails({ bookable }) {
   ) : null;
 }
 
-// use appropriate prop types!!
-
 BookableDetails.propTypes = {
-  bookable: PropTypes.instanceOf(Date).isRequired,
+  bookable: PropTypes.shape({
+    id: PropTypes.number,
+    group: PropTypes.string,
+    title: PropTypes.string,
+    notes: PropTypes.string,
+    days: PropTypes.arrayOf(PropTypes.number),
+    sessions: PropTypes.arrayOf(PropTypes.number),
+  }),
+}
+
+BookableDetails.defaultProps = {
+  bookable: null,
 }
