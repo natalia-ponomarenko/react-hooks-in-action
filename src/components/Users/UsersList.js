@@ -1,68 +1,70 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Spinner from '../../UI/Spinner';
 import getData from '../../utils/api';
 
-export default function UsersList() {
-  const [selectedUserIndex, setSelectedUserIndex] = useState(0);
+export default function UsersList({ user, setUser }) {
   const [users, setUsers] = useState(null);
-  const user = users?.[selectedUserIndex];
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+
   useEffect(() => {
-    getData("http://localhost:3001/users")
+    getData('http://localhost:3001/users')
       .then((usersList) => {
         setUsers(usersList);
+        setUser(usersList[0])
         setLoading(false);
       })
       .catch((unexpectedError) => {
         setError(unexpectedError);
-        setLoading(false)
+        setLoading(false);
       });
-  }, []);
+  }, [setUser]);
 
   if (error) {
-    return <p>{error.message}</p>
+    return <p>{error.message}</p>;
   }
 
   if (loading) {
-    return <p><Spinner/> Loading users...</p>
+    return (
+      <p>
+        <Spinner /> Loading users...
+      </p>
+    );
   }
 
-  const handleButtonClick = (selectedId) => {
-    setSelectedUserIndex(selectedId);
-  };
-
   return (
-    <>
-    {loading && <p><Spinner/> Loading users...</p>}
       <ul className="users items-list-nav">
-        {users.map((person, i) => (
+        {users.map((person) => (
           <li
-            key={person.name}
-            className={i === selectedUserIndex ? 'selected' : null}
+            key={person.id}
+            className={person.id === user?.id ? 'selected' : null}
           >
             <button
               type="button"
               className="btn"
-              onClick={() => handleButtonClick(i)}
+              onClick={() => setUser(person)}
             >
               {person.name}
             </button>
           </li>
         ))}
       </ul>
-      {user && (
-        <div className="item user">
-          <div className="item-header">
-            <h2>{user.name}</h2>
-          </div>
-          <div className="user-details">
-            <h3>{user.title}</h3>
-            <p>{user.notes}</p>
-          </div>
-        </div>
-      )}
-    </>
   );
 }
+
+UsersList.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.number,
+    img: PropTypes.string,
+    name: PropTypes.string,
+    title: PropTypes.string,
+    notes: PropTypes.string,
+  }),
+  setUser: PropTypes.func.isRequired,
+};
+
+UsersList.defaultProps = {
+  user: null,
+};
