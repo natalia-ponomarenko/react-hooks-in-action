@@ -12,11 +12,6 @@ export default function reducer(state, action) {
         ...state,
         bookableIndex: action.payload,
       };
-    case 'TOGGLE_HAS_DETAILS':
-      return {
-        ...state,
-        hasDetails: !state.hasDetails,
-      };
     case 'NEXT_BOOKABLE':
       count = state.bookables.filter(
         (bookable) => bookable.group === state.group
