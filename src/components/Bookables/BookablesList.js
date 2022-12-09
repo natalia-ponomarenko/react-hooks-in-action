@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import Spinner from '../../UI/Spinner';
@@ -17,8 +17,6 @@ export default function BookablesList({ bookable, setBookable }) {
   const groups = [
     ...new Set(bookables.map((bookableItem) => bookableItem.group)),
   ];
-
-  const nextButtonRef = useRef();
 
   useEffect(() => {
     getData('http://localhost:3001/bookables')
@@ -42,7 +40,6 @@ export default function BookablesList({ bookable, setBookable }) {
 
   function changeBookable(selectedBookable) {
     setBookable(selectedBookable);
-    nextButtonRef.current.focus();
   }
 
   function nextBookable() {
@@ -93,7 +90,6 @@ export default function BookablesList({ bookable, setBookable }) {
           className="btn focuse-mode"
           type="button"
           onClick={nextBookable}
-          ref={nextButtonRef}
           autoFocus
         >
           <FaArrowRight />
