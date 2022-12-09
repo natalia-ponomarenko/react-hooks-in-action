@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useState } from 'react';
 import {
   FaChevronLeft,
   FaCalendarDay,
@@ -6,11 +6,8 @@ import {
   FaCalendarCheck,
 } from 'react-icons/fa';
 import PropTypes from 'prop-types';
-import reducer from './weekReducer';
-import { getWeek } from '../../utils/date-wrangler';
 
-export default function WeekPicker({ date }) {
-  const [week, dispatch] = useReducer(reducer, date, getWeek);
+export default function WeekPicker({ dispatch }) {
   const [dateText, setDateText] = useState("2022-01-01");
 
   
@@ -65,13 +62,10 @@ export default function WeekPicker({ date }) {
           <FaChevronRight />
         </button>
       </p>
-      <p>
-        {week.start.toDateString()} - {week.end.toDateString()}
-      </p>
     </div>
   );
 }
 
 WeekPicker.propTypes = {
-  date: PropTypes.instanceOf(Date).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
