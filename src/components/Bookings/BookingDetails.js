@@ -1,9 +1,40 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import Booking from './Booking';
 
-export default function BookingDetails() {
+export default function BookingDetails({ booking, bookable }) {
   return (
-    <div className="booking-details placeholder">
-      <h3>Booking Details</h3>
+    <div className="booking-details">
+      <h2>Booking Details</h2>
+      {booking ? (
+        <Booking booking={booking} bookable={bookable} />
+      ) : (
+        <div className="booking-details-fields">
+          <p>Select a booking or a booking slot.</p>
+        </div>
+      )}
     </div>
   );
 }
+
+BookingDetails.propTypes = {
+  booking: PropTypes.shape({
+    session: PropTypes.string,
+    date: PropTypes.string,
+    bookableId: PropTypes.number,
+    title: PropTypes.string,
+  }),
+  bookable: PropTypes.shape({
+    id: PropTypes.number,
+    group: PropTypes.string,
+    title: PropTypes.string,
+    notes: PropTypes.string,
+    days: PropTypes.arrayOf(PropTypes.number),
+    sessions: PropTypes.arrayOf(PropTypes.number),
+  }),
+};
+
+BookingDetails.defaultProps = {
+  bookable: null,
+  booking: null,
+};
