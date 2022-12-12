@@ -2,11 +2,12 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { getGrid, transformBookings } from './grid-builder';
 import { getBookings } from '../../utils/api';
-import Spinner from "../../UI/Spinner";
+import Spinner from '../../UI/Spinner';
 
 export default function BookingsGrid({ week, bookable, booking, setBooking }) {
   const [bookings, setBookings] = useState(null);
   const [error, setError] = useState(false);
+  console.log(booking)
 
   const { grid, sessions, dates } = useMemo(
     () => (bookable ? getGrid(bookable, week.start) : {}),
@@ -26,8 +27,9 @@ export default function BookingsGrid({ week, bookable, booking, setBooking }) {
           }
         })
         .catch(setError);
-      return () => (doUpdate = false);
+      return () => { doUpdate = false };
     }
+    return undefined;
   }, [week, bookable, setBooking]);
 
   function cell(session, date) {
@@ -36,6 +38,7 @@ export default function BookingsGrid({ week, bookable, booking, setBooking }) {
 
     return (
       <td
+        role="presentation"
         key={date}
         className={isSelected ? 'selected' : null}
         onClick={bookings ? () => setBooking(cellData) : null}
@@ -56,7 +59,10 @@ export default function BookingsGrid({ week, bookable, booking, setBooking }) {
           {`There was a problem loading the bookings data (${error})`}
         </p>
       )}
-      <table className={bookings ? 'bookingsGrid active' : 'bookingsGrid'}>
+      <table
+        role="presentation"
+        className={bookings ? 'bookingsGrid active' : 'bookingsGrid'}
+      >
         <thead>
           <tr>
             <th>
@@ -83,7 +89,11 @@ export default function BookingsGrid({ week, bookable, booking, setBooking }) {
 }
 
 BookingsGrid.propTypes = {
-  // week: PropTypes.instanceOf(Date).isRequired,
+  week: PropTypes.shape({
+    date: PropTypes.instanceOf(Date),
+    start: PropTypes.instanceOf(Date),
+    end: PropTypes.instanceOf(Date),
+  }).isRequired,
   bookable: PropTypes.shape({
     id: PropTypes.number,
     group: PropTypes.string,
@@ -92,7 +102,12 @@ BookingsGrid.propTypes = {
     days: PropTypes.arrayOf(PropTypes.number),
     sessions: PropTypes.arrayOf(PropTypes.number),
   }),
-  booking: PropTypes.string,
+  booking: PropTypes.shape({
+    session: PropTypes.string,
+    date: PropTypes.string,
+    bookableId: PropTypes.number,
+    title: PropTypes.string,
+  }),
   setBooking: PropTypes.func.isRequired,
 };
 
