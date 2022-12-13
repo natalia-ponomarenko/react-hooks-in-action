@@ -5,8 +5,9 @@ import Booking from './Booking';
 import UserContext from '../Users/UserContext';
 
 export default function BookingDetails({ booking, bookable }) {
-  const user = useContext(UserContext);
+  const {user} = useContext(UserContext);
   const isBooker = booking && user && booking.bookerId === user.id;
+  console.log(booking)
   return (
     <div className="booking-details">
       <h2>
@@ -36,6 +37,7 @@ BookingDetails.propTypes = {
     date: PropTypes.string,
     bookableId: PropTypes.number,
     title: PropTypes.string,
+    bookerId: PropTypes.string,
   }),
   bookable: PropTypes.shape({
     id: PropTypes.number,

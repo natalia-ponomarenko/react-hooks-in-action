@@ -1,4 +1,4 @@
-import { sessions as sessionNames } from '../../static.json';
+import {sessions as sessionNames} from '../../static.json';
 import { addDays, shortISO } from '../../utils/date-wrangler';
 
 export function getGrid(bookable, startDate) {
