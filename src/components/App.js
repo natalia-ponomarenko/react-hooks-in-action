@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import '../App.css';
 import { FaCalendarAlt, FaDoorOpen, FaUsers } from 'react-icons/fa';
-import UserContext from './Users/UserContext';
+import {UserProvider} from './Users/UserContext';
 import BookablesPage from './Bookables/BookablesPage';
 import BookingsPage from './Bookings/BookingsPage';
 import UsersPage from './Users/UsersPage';
 import UserPicker from './Users/UserPicker';
 
 export default function App() {
-  const [user, setUser] = useState();
   return (
-    <UserContext.Provider value={user}>
+    <UserProvider>
       <Router>
         <div className="App">
           <header>
@@ -37,7 +36,7 @@ export default function App() {
                 </li>
               </ul>
             </nav>
-            <UserPicker user={user} setUser={setUser} />
+            <UserPicker />
           </header>
           <Routes>
             <Route path="/bookings" element={<BookingsPage />} />
@@ -46,6 +45,6 @@ export default function App() {
           </Routes>
         </div>
       </Router>
-    </UserContext.Provider>
+    </UserProvider>
   );
 }
