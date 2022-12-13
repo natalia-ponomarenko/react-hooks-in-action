@@ -7,13 +7,11 @@ export default function UsersList({ user, setUser }) {
   const [users, setUsers] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-
-
+ 
   useEffect(() => {
     getData('http://localhost:3001/users')
       .then((usersList) => {
         setUsers(usersList);
-        setUser(usersList[0])
         setLoading(false);
       })
       .catch((unexpectedError) => {
