@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../../UI/Spinner';
-import UserContext, {UserSetContext} from "./UserContext";
+import {useUser} from "./UserContext";
 
 export default function UserPicker() {
+  const [user, setUser] = useUser();
   const [users, setUsers] = useState(null);
-  const user = useContext(UserContext);
-  const setUser = useContext(UserSetContext)
 
   useEffect(() => {
     fetch('http://localhost:3001/users')
@@ -14,12 +13,15 @@ export default function UserPicker() {
       .then((data) => {
         setUsers(data);
         setUser(data[0]);
+        console.log(user)
       });
   }, [setUser]);
   
   function handleSelect(e) {
     const selectedID = parseInt(e.target.value, 10);
     const selectedUser = users.find((person) => person.id === selectedID);
+
+    console.log(selectedUser)
 
     setUser(selectedUser);
   }
