@@ -13,15 +13,12 @@ export default function UserPicker() {
       .then((data) => {
         setUsers(data);
         setUser(data[0]);
-        console.log(user)
       });
   }, [setUser]);
   
   function handleSelect(e) {
     const selectedID = parseInt(e.target.value, 10);
     const selectedUser = users.find((person) => person.id === selectedID);
-
-    console.log(selectedUser)
 
     setUser(selectedUser);
   }
