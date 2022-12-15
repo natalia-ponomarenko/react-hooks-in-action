@@ -33,8 +33,8 @@ export function transformBookings(bookingsArray) {
       const bookingsSession = bookings;
       bookingsSession[session] = {};
     }
-    const fullBooking = booking;
-    fullBooking[session][date] = booking;
+    const bookingItem = booking;
+    bookingItem[session][date] = booking;
     return bookings;
   }, {});
 }
