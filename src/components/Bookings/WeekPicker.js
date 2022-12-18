@@ -8,7 +8,7 @@ import {
 import PropTypes from 'prop-types';
 
 export default function WeekPicker({ dispatch }) {
-  const [dateText, setDateText] = useState("2022-01-01");
+  const [dateText, setDateText] = useState("2020-06-24");
 
   
   function handleInput(e) {

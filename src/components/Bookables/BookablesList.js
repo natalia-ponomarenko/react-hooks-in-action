@@ -1,17 +1,10 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import React, { useEffect } from 'react';
+import React from 'react';
+import {Link, useNavigate} from "react-router-dom";
 import { FaArrowRight } from 'react-icons/fa';
 import PropTypes from 'prop-types';
-import Spinner from '../../UI/Spinner';
-import useFetch from '../../utils/useFetch';
 
-export default function BookablesList({ bookable, setBookable }) {
-  const {
-    data: bookables = [],
-    status,
-    error,
-  } = useFetch('http://localhost:3001/bookables');
-
+export default function BookablesList({ bookable, bookables, getUrl }) {
   const group = bookable?.group;
   const bookablesInGroup = bookables.filter(
     (bookableItem) => bookableItem.group === group
@@ -20,37 +13,20 @@ export default function BookablesList({ bookable, setBookable }) {
     ...new Set(bookables.map((bookableItem) => bookableItem.group)),
   ];
 
-  useEffect(() => {
-    setBookable(bookables[0]);
-  }, [bookables, setBookable]);
+  const navigate = useNavigate();
 
   function changeGroup(event) {
     const bookablesInSelectedGroup = bookables.filter(
       (bookableItem) => bookableItem.group === event.target.value
     );
-    setBookable(bookablesInSelectedGroup[0]);
-  }
-
-  function changeBookable(selectedBookable) {
-    setBookable(selectedBookable);
+    navigate(getUrl(bookablesInSelectedGroup[0].id));
   }
 
   function nextBookable() {
     const index = bookablesInGroup.indexOf(bookable);
     const nextIndex = (index + 1) % bookablesInGroup.length;
     const nextBookableItem = bookablesInGroup[nextIndex];
-    setBookable(nextBookableItem);
-  }
-
-  if (status === 'error') {
-    return <p>{error.message}</p>;
-  }
-  if (status === 'loading') {
-    return (
-      <p>
-        <Spinner /> Loading bookables...
-      </p>
-    );
+    navigate(getUrl(nextBookableItem.id));
   }
 
   return (
@@ -68,19 +44,19 @@ export default function BookablesList({ bookable, setBookable }) {
             key={bookableItem.id}
             className={bookableItem.id === bookable.id ? 'selected' : null}
           >
-            <button
-              type="button"
+            <Link
+              to={getUrl(bookableItem.id)}
               className="btn"
-              onClick={() => changeBookable(bookableItem)}
+              replace
             >
               {bookableItem.title}
-            </button>
+            </Link>
           </li>
         ))}
       </ul>
       <p>
         <button
-          className="btn focuse-mode"
+          className="btn"
           type="button"
           onClick={nextBookable}
           autoFocus
@@ -102,7 +78,8 @@ BookablesList.propTypes = {
     days: PropTypes.arrayOf(PropTypes.number),
     sessions: PropTypes.arrayOf(PropTypes.number),
   }),
-  setBookable: PropTypes.func.isRequired,
+  // bookables:
+  // getUrl:
 };
 
 BookablesList.defaultProps = {
