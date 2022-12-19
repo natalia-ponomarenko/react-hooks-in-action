@@ -1,14 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
+import useFetch from '../../utils/useFetch';
+import { shortISO } from '../../utils/date-wrangler';
+import { useBookingsParams } from './bookingsHooks';
 import BookablesList from '../Bookables/BookablesList';
 import Bookings from './Bookings';
+import Spinner from '../../UI/Spinner';
 
 // renders BookableList and Bookings
 
 export default function BookingsPage() {
-  const [bookable, setBookable] = useState(null);
+  const {
+    data: bookables = [],
+    status,
+    error,
+  } = useFetch('http://localhost:3001/bookables');
+  const { date, bookableId } = useBookingsParams();
+  const bookable = bookables.find((bookableItem) => bookableItem.id === bookableId) || bookables[0];
+
+  const getUrl = (id) => {
+    const root = `/bookings?bookableId=${id}`;
+    return date ? `${root}&date=${shortISO(date)}` : root;
+  }
+
+  if (status === 'error') {
+    return <p>{error.message}</p>;
+  }
+
+  if (status === 'loading') {
+    return <Spinner />;
+  }
   return (
     <main className="bookings-page">
-      <BookablesList bookable={bookable} setBookable={setBookable} />
+      <BookablesList
+        bookable={bookable}
+        bookables={bookables}
+        getUrl={getUrl}
+      />
       <Bookings bookable={bookable} />
     </main>
   );

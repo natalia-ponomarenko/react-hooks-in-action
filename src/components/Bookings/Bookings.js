@@ -1,18 +1,29 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {getWeek} from "../../utils/date-wrangler";
+import { getWeek, shortISO } from '../../utils/date-wrangler';
+import { useBookingsParams, useBookings } from './bookingsHooks';
 import WeekPicker from './WeekPicker';
 import BookingsGrid from './BookingsGrid';
 import BookingDetails from './BookingDetails';
-import weekReducer from './weekReducer';
 
 export default function Bookings({ bookable }) {
-  const [week, dispatch] = useReducer(weekReducer, new Date(), getWeek);
   const [booking, setBooking] = useState(null);
+  
+  const { date } = useBookingsParams();
+  const week = getWeek(date);
+  const weekStart = shortISO(week.start);
+
+  const { bookings } = useBookings(bookable?.id, week.start, week.end);
+  const selectedBooking = bookings?.[booking?.session]?.[booking.date];
+
+  useEffect(() => {
+    setBooking(null);
+  }, [bookable, weekStart]);
+
   return (
     <div className="bookings">
       <div>
-        <WeekPicker dispatch={dispatch} />
+        <WeekPicker />
         <BookingsGrid
           week={week}
           bookable={bookable}
@@ -20,7 +31,10 @@ export default function Bookings({ bookable }) {
           setBooking={setBooking}
         />
       </div>
-      <BookingDetails booking={booking} bookable={bookable} />
+      <BookingDetails
+        booking={selectedBooking || booking}
+        bookable={bookable}
+      />
     </div>
   );
 }
