@@ -25,12 +25,12 @@ export function useGrid(bookable, startDate) {
 
 export function useBookingsParams() {
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log(searchParams);
+
   const searchDate = searchParams.get('date');
   const bookableId = searchParams.get('bookableId');
   const date = isDate(searchDate) ? new Date(searchDate) : new Date();
   const idInt = parseInt(bookableId, 10);
-  const hasId = !isNaN(idInt);
+  const hasId = !Number.isNaN(idInt);
 
   function setBookingsDate(dateUsed) {
     const params = {};

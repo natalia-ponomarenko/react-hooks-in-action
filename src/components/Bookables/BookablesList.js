@@ -19,6 +19,8 @@ export default function BookablesList({ bookable, bookables, getUrl }) {
     const bookablesInSelectedGroup = bookables.filter(
       (bookableItem) => bookableItem.group === event.target.value
     );
+
+    console.log(bookables)
     navigate(getUrl(bookablesInSelectedGroup[0].id));
   }
 
@@ -78,14 +80,14 @@ BookablesList.propTypes = {
     days: PropTypes.arrayOf(PropTypes.number),
     sessions: PropTypes.arrayOf(PropTypes.number),
   }),
-  bookables: PropTypes.arrayOf({
-    id: PropTypes.number,
+  bookables: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number,
     group: PropTypes.string,
     title: PropTypes.string,
     notes: PropTypes.string,
     days: PropTypes.arrayOf(PropTypes.number),
     sessions: PropTypes.arrayOf(PropTypes.number),
-  }),
+  })),
   getUrl: PropTypes.func.isRequired,
 };
 
