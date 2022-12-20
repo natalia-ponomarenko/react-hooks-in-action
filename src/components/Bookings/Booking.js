@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 
 export default function Booking({ booking, bookable }) {
   const { title, date, session, notes } = booking;
-  console.log(booking, bookable)
+
   return (
     <div className="booking-details-fields">
       <div>Title</div>
@@ -30,12 +30,12 @@ Booking.propTypes = {
     date: PropTypes.string,
     bookableId: PropTypes.number,
     title: PropTypes.string,
+    notes: PropTypes.string,
   }),
   bookable: PropTypes.shape({
     id: PropTypes.number,
     group: PropTypes.string,
     title: PropTypes.string,
-    notes: PropTypes.string,
     days: PropTypes.arrayOf(PropTypes.number),
     sessions: PropTypes.arrayOf(PropTypes.number),
   }),

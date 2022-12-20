@@ -1,35 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../../UI/Spinner';
-import getData from '../../utils/api';
+import useFetch from '../../utils/useFetch';
 
 export default function UsersList({ user, setUser }) {
-  const [users, setUsers] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
- 
-  useEffect(() => {
-    getData('http://localhost:3001/users')
-      .then((usersList) => {
-        setUsers(usersList);
-        setLoading(false);
-      })
-      .catch((unexpectedError) => {
-        setError(unexpectedError);
-        setLoading(false);
-      });
-  }, [setUser]);
+  const {data: users = [], status, error} = useFetch(
+    "http://localhost:3001/users"
+  );
+;
 
-  if (error) {
-    return <p>{error.message}</p>;
+  if (status === "error") {
+    return <p>{error.message}</p>
   }
 
-  if (loading) {
-    return (
-      <p>
-        <Spinner /> Loading users...
-      </p>
-    );
+  if (status === "loading") {
+    return <p><Spinner/> Loading users...</p>
   }
 
   return (

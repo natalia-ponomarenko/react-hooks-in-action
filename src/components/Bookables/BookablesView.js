@@ -4,7 +4,7 @@ import { FaPlus } from 'react-icons/fa';
 import BookablesList from './BookablesList';
 import BookableDetails from './BookableDetails';
 import useFetch from '../../utils/useFetch';
-import PageSpinner from '../../UI/Spinner';
+import PageSpinner from '../../UI/PageSpinner';
 
 export default function BookablesView() {
   const {
@@ -17,9 +17,11 @@ export default function BookablesView() {
 
   const bookable =
     bookables.find((b) => b.id === parseInt(id, 10)) || bookables[0];
+
   if (status === 'error') {
     return <p>{error.message}</p>;
   }
+  
   if (status === 'loading') {
     return <PageSpinner />;
   }

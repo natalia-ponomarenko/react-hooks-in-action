@@ -4,9 +4,8 @@ import { shortISO } from '../../utils/date-wrangler';
 import { useBookingsParams } from './bookingsHooks';
 import BookablesList from '../Bookables/BookablesList';
 import Bookings from './Bookings';
-import Spinner from '../../UI/Spinner';
+import PageSpinner from '../../UI/PageSpinner';
 
-// renders BookableList and Bookings
 
 export default function BookingsPage() {
   const {
@@ -27,7 +26,7 @@ export default function BookingsPage() {
   }
 
   if (status === 'loading') {
-    return <Spinner />;
+    return <PageSpinner />;
   }
   return (
     <main className="bookings-page">
