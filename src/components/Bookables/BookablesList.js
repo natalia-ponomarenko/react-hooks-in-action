@@ -78,10 +78,18 @@ BookablesList.propTypes = {
     days: PropTypes.arrayOf(PropTypes.number),
     sessions: PropTypes.arrayOf(PropTypes.number),
   }),
-  // bookables:
-  // getUrl:
+  bookables: PropTypes.arrayOf({
+    id: PropTypes.number,
+    group: PropTypes.string,
+    title: PropTypes.string,
+    notes: PropTypes.string,
+    days: PropTypes.arrayOf(PropTypes.number),
+    sessions: PropTypes.arrayOf(PropTypes.number),
+  }),
+  getUrl: PropTypes.func.isRequired,
 };
 
 BookablesList.defaultProps = {
   bookable: null,
+  bookables: [],
 };
