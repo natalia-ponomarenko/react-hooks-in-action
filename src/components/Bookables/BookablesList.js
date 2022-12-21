@@ -19,8 +19,7 @@ export default function BookablesList({ bookable, bookables, getUrl }) {
     const bookablesInSelectedGroup = bookables.filter(
       (bookableItem) => bookableItem.group === event.target.value
     );
-
-    console.log(bookables)
+    
     navigate(getUrl(bookablesInSelectedGroup[0].id));
   }
 

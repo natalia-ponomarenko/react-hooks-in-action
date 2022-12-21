@@ -8,18 +8,10 @@ import BookableNew from "./BookableNew";
 export default function BookablesPage () {
   return (
     <Routes>
-      <Route path="/:id">
-        <BookablesView/>
-      </Route>
-      <Route path="/">
-        <BookablesView/>
-      </Route>
-      <Route path="/:id/edit">
-        <BookableEdit/>
-      </Route>
-      <Route path="/new">
-        <BookableNew/>
-      </Route>
+      <Route path="/:id" element={<BookablesView/>} />
+      <Route exact path='/' element={<BookablesView/>} />
+      <Route exact path="/:id/edit" element={<BookableEdit/>} />
+      <Route path="/new" element={<BookableNew/>} />
     </Routes>
   );
 }

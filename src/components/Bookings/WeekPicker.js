@@ -45,7 +45,7 @@ export default function WeekPicker() {
             id="wpDate"
             defaultValue="2020-06-24"
           />
-          <button type="button" className="go btn" onClick={goToDate(textboxRef.current.value)}>
+          <button type="button" className="go btn" onClick={() => goToDate(textboxRef.current.value)}>
             <FaCalendarCheck />
             <span>Go</span>
           </button>

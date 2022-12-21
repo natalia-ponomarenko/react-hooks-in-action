@@ -1,7 +1,8 @@
-import {sessions as sessionNames} from '../../static.json';
+import data from '../../static.json';
 import { addDays, shortISO } from '../../utils/date-wrangler';
 
 export function getGrid(bookable, startDate) {
+  const {sessions: sessionNames} = data;
   const dates = bookable.days
     .sort()
     .map((day) => shortISO(addDays(startDate, day)));

@@ -1,20 +1,21 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useQuery } from 'react-query';
 import Spinner from '../../UI/Spinner';
-import { useUser } from "./UserContext";
-import useFetch from '../../utils/useFetch';
+import { useUser } from './UserContext';
+import getData from '../../utils/api';
 
 export default function UserPicker() {
   const [user, setUser] = useUser();
 
-  const {data: users = [], status} = useFetch(
-    "http://localhost:3001/users"
+  const { data: users = [], status } = useQuery('users', () =>
+    getData('http://localhost:3001/users')
   );
 
   useEffect(() => {
-        setUser(users[0]);
-  }, [users, setUser]);
-  
+    setUser(users[0]);
+  }, [setUser, users]);
+
   function handleSelect(e) {
     const selectedID = parseInt(e.target.value, 10);
     const selectedUser = users.find((person) => person.id === selectedID);
@@ -22,18 +23,18 @@ export default function UserPicker() {
     setUser(selectedUser);
   }
 
-  if (status === "loading") {
-    return <Spinner/>
+  if (status === 'loading') {
+    return <Spinner />;
   }
 
-  if (status === "error") {
-    return <span>Error!</span>
+  if (status === 'error') {
+    return <span>Error!</span>;
   }
-  
+
   return (
     <select value={user?.id} onChange={handleSelect}>
       {users.map((person) => (
-        <option key={person.id} value={person.id} >
+        <option key={person.id} value={person.id}>
           {person.name}
         </option>
       ))}
