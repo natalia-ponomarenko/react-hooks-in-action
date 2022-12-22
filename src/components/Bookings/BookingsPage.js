@@ -1,25 +1,27 @@
 import React from 'react';
-import useFetch from '../../utils/useFetch';
+import { useQuery } from 'react-query';
 import { shortISO } from '../../utils/date-wrangler';
 import { useBookingsParams } from './bookingsHooks';
 import BookablesList from '../Bookables/BookablesList';
 import Bookings from './Bookings';
 import PageSpinner from '../../UI/PageSpinner';
-
+import getData from '../../utils/api';
 
 export default function BookingsPage() {
   const {
     data: bookables = [],
     status,
     error,
-  } = useFetch('http://localhost:3001/bookables');
+  } = useQuery('bookables', () => getData('http://localhost:3001/bookables'));
   const { date, bookableId } = useBookingsParams();
-  const bookable = bookables.find((bookableItem) => bookableItem.id === bookableId) || bookables[0];
+  const bookable =
+    bookables.find((bookableItem) => bookableItem.id === bookableId) ||
+    bookables[0];
 
   const getUrl = (id) => {
     const root = `/bookings?bookableId=${id}`;
     return date ? `${root}&date=${shortISO(date)}` : root;
-  }
+  };
 
   if (status === 'error') {
     return <p>{error.message}</p>;

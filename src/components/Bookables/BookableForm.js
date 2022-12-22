@@ -2,14 +2,15 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import { FaCloudUploadAlt, FaTrash, FaWindowClose } from 'react-icons/fa';
 import PropTypes from 'prop-types';
+import data from '../../static.json';
 
-import {sessions as sessionsArray, days as daysArray} from '../../static.json';
 
 export default function BookableForm({
   formState = {},
   handleSubmit,
   handleDelete,
 }) {
+  const {days: daysArray, sessions: sessionsArray} = data;
   const { state = {}, handleChange, handleChecked } = formState;
   const { title = '', group = '', notes = '' } = state;
   const { days = [], sessions = [] } = state;
@@ -119,6 +120,11 @@ export default function BookableForm({
 
 BookableForm.propTypes = {
   formState: PropTypes.shape({}).isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func,
+  handleDelete: PropTypes.func,
+}
+
+BookableForm.defaultProps = {
+  handleSubmit: undefined,
+  handleDelete: undefined,
 }

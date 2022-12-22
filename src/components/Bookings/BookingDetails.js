@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FaEdit } from 'react-icons/fa';
 import Booking from './Booking';
-import {useUser} from '../Users/UserContext';
+import { useUser } from '../Users/UserContext';
 
 export default function BookingDetails({ booking, bookable }) {
-  const {user} = useUser();
+  const { user } = useUser();
   const isBooker = booking && user && booking.bookerId === user.id;
-  console.log(booking)
   return (
     <div className="booking-details">
       <h2>

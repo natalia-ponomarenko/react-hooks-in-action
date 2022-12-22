@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React from 'react';
 import Spinner from '../../UI/Spinner';
 import { useBookings, useGrid } from './bookingsHooks';
 
@@ -11,10 +11,6 @@ export default function BookingsGrid({ week, bookable, booking, setBooking }) {
   );
 
   const { grid, sessions, dates } = useGrid(bookable, week.start);
-  
-  useEffect(() => {
-    setBooking(null);
-  }, [bookable, week.start, setBooking]);
 
   function cell(session, date) {
     const cellData = bookings?.[session]?.[date] || grid[session][date];
