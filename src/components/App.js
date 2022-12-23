@@ -6,10 +6,11 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { UserProvider } from './Users/UserContext';
 import UserPicker from './Users/UserPicker';
 import PageSpinner from '../UI/PageSpinner';
+import ErrorBoundary from '../UI/ErrorBoundary';
 
-const BookablesPage = lazy(() => import("./Bookables/BookablesPage"));
-const BookingsPage = lazy(() => import("./Bookings/BookingsPage"));
-const UsersPage = lazy(() => import("./Users/UsersPage"));
+const BookablesPage = lazy(() => import('./Bookables/BookablesPage'));
+const BookingsPage = lazy(() => import('./Bookings/BookingsPage'));
+const UsersPage = lazy(() => import('./Users/UsersPage'));
 
 const queryClient = new QueryClient();
 
@@ -42,15 +43,26 @@ export default function App() {
                   </li>
                 </ul>
               </nav>
+
               <UserPicker />
             </header>
-            <Suspense fallback={<PageSpinner/>}>
-            <Routes>
-              <Route path="/bookings" element={<BookingsPage />} />
-              <Route path="/bookables/*" element={<BookablesPage />} />
-              <Route path="/users" element={<UsersPage />} />
-            </Routes>
-            </Suspense>
+
+            <ErrorBoundary
+              fallback={
+                <>
+                  <h1>Something went wrong!</h1>
+                  <p>Try reloading the page.</p>
+                </>
+              }
+            >
+              <Suspense fallback={<PageSpinner />}>
+                <Routes>
+                  <Route path="/bookings" element={<BookingsPage />} />
+                  <Route path="/bookables/*" element={<BookablesPage />} />
+                  <Route path="/users" element={<UsersPage />} />
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
           </div>
         </Router>
       </UserProvider>
