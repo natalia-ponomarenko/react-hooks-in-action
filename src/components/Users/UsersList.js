@@ -1,21 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-query';
 import getData from '../../utils/api';
 
 export default function UsersList({ user, setUser }) {
   const {data: users = []} = useQuery(
-    "bookables",
+    "users",
     () => getData("http://localhost:3001/users"),
     {
     suspense: true
     }
     );
   
-  useEffect(() => {
-    setUser(users[0]);
-  }, [setUser, users]);
-
   return (
     <ul className="users items-list-nav">
       {users.map((person) => (
