@@ -4,15 +4,17 @@ import { shortISO } from '../../utils/date-wrangler';
 import { useBookingsParams } from './bookingsHooks';
 import BookablesList from '../Bookables/BookablesList';
 import Bookings from './Bookings';
-import PageSpinner from '../../UI/PageSpinner';
 import getData from '../../utils/api';
 
 export default function BookingsPage() {
-  const {
-    data: bookables = [],
-    status,
-    error,
-  } = useQuery('bookables', () => getData('http://localhost:3001/bookables'));
+  const {data: bookables = []} = useQuery(
+    "bookables",
+    () => getData("http://localhost:3001/bookables"),
+    {
+    suspense: true
+    }
+    );
+
   const { date, bookableId } = useBookingsParams();
   const bookable =
     bookables.find((bookableItem) => bookableItem.id === bookableId) ||
@@ -23,13 +25,6 @@ export default function BookingsPage() {
     return date ? `${root}&date=${shortISO(date)}` : root;
   };
 
-  if (status === 'error') {
-    return <p>{error.message}</p>;
-  }
-
-  if (status === 'loading') {
-    return <PageSpinner />;
-  }
   return (
     <main className="bookings-page">
       <BookablesList

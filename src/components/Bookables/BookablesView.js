@@ -4,28 +4,21 @@ import { FaPlus } from 'react-icons/fa';
 import { useQuery } from 'react-query';
 import BookablesList from './BookablesList';
 import BookableDetails from './BookableDetails';
-import PageSpinner from '../../UI/PageSpinner';
 import getData from '../../utils/api';
 
 export default function BookablesView() {
-  const {
-    data: bookables = [],
-    status,
-    error,
-  } = useQuery('bookables', () => getData('http://localhost:3001/bookables'));
+  const {data: bookables = []} = useQuery(
+    "bookables",
+    () => getData("http://localhost:3001/bookables"),
+    {
+    suspense: true
+    }
+    );
 
   const { id } = useParams();
 
   const bookable =
     bookables.find((b) => b.id === parseInt(id, 10)) || bookables[0];
-
-  if (status === 'error') {
-    return <p>{error.message}</p>;
-  }
-
-  if (status === 'loading') {
-    return <PageSpinner />;
-  }
 
   return (
     <main className="bookables-page">
