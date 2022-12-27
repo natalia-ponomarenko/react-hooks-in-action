@@ -14,7 +14,7 @@ export default function UserPicker() {
 
   useEffect(() => {
     setUser(users[0]);
-  }, [setUser, users]);
+  }, [users, setUser]);
 
   function handleSelect(e) {
     const selectedID = parseInt(e.target.value, 10);

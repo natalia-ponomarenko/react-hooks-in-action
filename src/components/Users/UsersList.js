@@ -1,32 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-query';
-import Spinner from '../../UI/Spinner';
 import getData from '../../utils/api';
 
 export default function UsersList({ user, setUser }) {
-  const {
-    data: users = [],
-    status,
-    error,
-  } = useQuery('users', () => getData('http://localhost:3001/users'));
-  
-  useEffect(() => {
-    setUser(users[0]);
-  }, [setUser, users]);
-
-  if (status === 'error') {
-    return <p>{error.message}</p>;
-  }
-
-  if (status === 'loading') {
-    return (
-      <p>
-        <Spinner /> Loading users...
-      </p>
+  const {data: users = []} = useQuery(
+    "users",
+    () => getData("http://localhost:3001/users"),
+    {
+    suspense: true
+    }
     );
-  }
-
+  
   return (
     <ul className="users items-list-nav">
       {users.map((person) => (
