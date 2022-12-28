@@ -11,7 +11,7 @@ export default function UserDetails({ userID }) {
     { suspense: true }
   );
 
-  return user ? (
+  return (
     <div className="item user">
       <div className="item-header">
         <h2>{user.name}</h2>
@@ -26,19 +26,9 @@ export default function UserDetails({ userID }) {
         <p>{user.notes}</p>
       </div>
     </div>
-  ) : null;
+  )
 }
 
 UserDetails.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number,
-    name: PropTypes.string,
-    img: PropTypes.string,
-    title: PropTypes.string,
-    notes: PropTypes.string,
-  }),
-};
-
-UserDetails.defaultProps = {
-  user: null,
+  userID: PropTypes.number.isRequired,
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-query';
 import getData from '../../utils/api';
+import ButtonPending from '../../UI/ButtonPending';
 
 export default function UsersList({ user, setUser }) {
   const {data: users = []} = useQuery(
@@ -19,9 +20,9 @@ export default function UsersList({ user, setUser }) {
           key={person.id}
           className={person.id === user?.id ? 'selected' : null}
         >
-          <button type="button" className="btn" onClick={() => setUser(person)}>
+          <ButtonPending className="btn" onClick={() => setUser(person)}>
             {person.name}
-          </button>
+          </ButtonPending>
         </li>
       ))}
     </ul>
