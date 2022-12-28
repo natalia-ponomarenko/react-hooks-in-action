@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import { useQuery } from 'react-query';
+import PropTypes from 'prop-types';
 
 export default function Avatar({ src, alt, fallbackSrc, ...props }) {
   return (
@@ -23,6 +24,17 @@ function Img({ src, alt, ...props }) {
     { suspense: true }
   );
   return <img src={imgObject.src} alt={alt} {...props} />;
+}
+
+Avatar.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+  fallbackSrc: PropTypes.string.isRequired,
+}
+
+Img.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
 }
 
 
