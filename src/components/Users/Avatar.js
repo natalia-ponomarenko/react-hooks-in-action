@@ -2,17 +2,17 @@ import React, { Suspense } from 'react';
 import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 
-export default function Avatar({ src, alt, fallbackSrc, ...props }) {
+export default function Avatar({ src, alt, fallbackSrc }) {
   return (
     <div className="user-avatar">
       <Suspense fallback={<img src={fallbackSrc} alt="Fallback Avatar" />}>
-        <Img src={src} alt={alt} {...props} />
+        <Img src={src} alt={alt} />
       </Suspense>
     </div>
   );
 }
 
-function Img({ src, alt, ...props }) {
+function Img({ src, alt }) {
   const { data: imgObject } = useQuery(
     src,
     () =>
@@ -23,7 +23,7 @@ function Img({ src, alt, ...props }) {
       }),
     { suspense: true }
   );
-  return <img src={imgObject.src} alt={alt} {...props} />;
+  return <img src={imgObject.src} alt={alt} />;
 }
 
 Avatar.propTypes = {

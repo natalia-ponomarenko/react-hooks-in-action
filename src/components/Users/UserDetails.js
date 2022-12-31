@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-query';
 import getData from '../../utils/api';
 import Avatar from './Avatar';
+import UserBookings from './UserBookings';
+import UserTodos from './UserTodos';
 
-export default function UserDetails({ userID }) {
+export default function UserDetails({ userID, isPending }) {
   const { data: user } = useQuery(
     ['user', userID],
     () => getData(`http://localhost:3001/users/${userID}`),
@@ -12,7 +14,7 @@ export default function UserDetails({ userID }) {
   );
 
   return (
-    <div className="item user">
+    <div className={isPending ? 'item user user-pending' : 'item user'}>
       <div className="item-header">
         <h2>{user.name}</h2>
       </div>
@@ -25,10 +27,17 @@ export default function UserDetails({ userID }) {
         <h3>{user.title}</h3>
         <p>{user.notes}</p>
       </div>
+        <Suspense fallback={<p>Loading user bookings...</p>}>
+          <UserBookings id={userID} />
+        </Suspense>
+        <Suspense fallback={<p>Loading user todos...</p>}>
+          <UserTodos id={userID} />
+        </Suspense>
     </div>
-  )
+  );
 }
 
 UserDetails.propTypes = {
   userID: PropTypes.number.isRequired,
+  isPending: PropTypes.bool.isRequired,
 };
